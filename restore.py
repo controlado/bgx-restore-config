@@ -1,12 +1,17 @@
 import os
 import shutil
+
 from datetime import datetime
 
 
 class BGX:
 
     base_files = ["application", "core", "plugins"]
-    backup_dir = "backup/settings_modern.dat"
+
+    config_name = "settings_modern.dat"
+    config_dir = f"backup/{config_name}"
+    old_config_dir = f"backup/old_{config_name}"
+
     roaming_dir = os.getenv("APPDATA")
     roaming_content = os.listdir(roaming_dir)
 
@@ -25,14 +30,18 @@ class BGX:
             return bgx_folder["message"]
 
         if not self.__check_bgx_dir(bgx_folder["path"]):
-            return "One of the essential folders are not in the BGX directory."
+            print("One of the essential folders are not in the BGX directory.")
+
+        bgx_folder = bgx_folder['path']
+        config_to_backup = f"{bgx_folder}/{self.config_name}"
 
         try:
-            shutil.copy(self.backup_dir, bgx_folder["path"])
-        except Exception as error:
-            return f"Something wrong happened ({error})"
+            shutil.copy(self.config_dir, bgx_folder)
+            shutil.copy(config_to_backup, self.old_config_dir)
+        except FileNotFoundError:
+            return "Your new settings have been installed."
         else:
-            return "The backup file has been moved successfully."
+            return "Your new settings have been installed and the old ones have been saved."
 
     def __get_bgx_folder(self) -> dict:
         possible_folders = [
@@ -74,7 +83,7 @@ class BGX:
         return objects.get(latest_edited)
 
     def __check_settings(self) -> bool:
-        return os.path.exists(self.backup_dir)
+        return os.path.exists(self.config_dir)
 
     def __check_bgx_dir(self, bgx_folder: str) -> bool:
         return all(folder in os.listdir(bgx_folder) for folder in self.base_files)
