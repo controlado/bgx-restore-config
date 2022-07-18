@@ -38,13 +38,14 @@ class BGX:
         config_to_backup = f"{bgx_folder}/{self.config_name}"
 
         try:
-            shutil_copy(self.config_dir, bgx_folder)
             shutil_copy(config_to_backup, self.old_config_dir)
         except FileNotFoundError:
             # if an old configuration was not found.
             return "Your new settings have been installed."
         else:
             return "Your new settings have been installed and the old ones have been saved."
+        finally:
+            shutil_copy(self.config_dir, bgx_folder)
 
     def __get_bgx_folder(self) -> dict:
         possible_folders = [
