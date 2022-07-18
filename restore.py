@@ -1,6 +1,6 @@
 import os
-import shutil
 
+from shutil import copy as shutil_copy
 from datetime import datetime
 
 
@@ -32,12 +32,12 @@ class BGX:
         if not self.__check_bgx_dir(bgx_folder["path"]):
             print("One of the essential folders are not in the BGX directory.")
 
-        bgx_folder = bgx_folder['path']
+        bgx_folder = bgx_folder["path"]
         config_to_backup = f"{bgx_folder}/{self.config_name}"
 
         try:
-            shutil.copy(self.config_dir, bgx_folder)
-            shutil.copy(config_to_backup, self.old_config_dir)
+            shutil_copy(self.config_dir, bgx_folder)
+            shutil_copy(config_to_backup, self.old_config_dir)
         except FileNotFoundError:
             return "Your new settings have been installed."
         else:
