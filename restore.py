@@ -82,3 +82,4 @@ class BGX:
 
 if __name__ == "__main__":
     bgx = BGX()
+    input(":)")
