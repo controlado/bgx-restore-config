@@ -6,7 +6,8 @@ from shutil import copy as shutil_copy
 
 class BGX:
 
-    base_files = ["application", "core", "plugins"]  # files that you always have in bgx directory.
+    # files that you always have in bgx directory.
+    base_files = ["application", "core", "plugins"]
 
     config_name = "settings_modern.dat"
     config_dir = f"backup/{config_name}"
@@ -68,13 +69,9 @@ class BGX:
                 "message": "Success."
             }
 
-        return {  # if there is another folder with 32 characters.
-            "path": self.__get_correct_folder_path(possible_folders),
-            "error": False,
-            "message": "Success."
-        }
+        return self.__get_correct_folder_path(possible_folders)
 
-    def __get_correct_folder_path(self, possible_folders: list) -> str:
+    def __get_correct_folder_path(self, possible_folders: list) -> dict:
         # basically, this function takes the folder that was most recently edited.
 
         objects = {}
@@ -86,7 +83,12 @@ class BGX:
             objects[date_object] = path
 
         latest_edited = max(objects.keys())
-        return objects.get(latest_edited)
+
+        return {  # if there is another folder with 32 characters.
+            "path": objects.get(latest_edited),
+            "error": False,
+            "message": "Success."
+        }
 
     def __check_settings(self) -> bool:
         return os.path.exists(self.config_dir)
