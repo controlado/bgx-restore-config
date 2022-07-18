@@ -1,7 +1,7 @@
 import os
 
-from shutil import copy as shutil_copy
 from datetime import datetime
+from shutil import copy as shutil_copy
 
 
 class BGX:
@@ -42,8 +42,6 @@ class BGX:
         except FileNotFoundError:
             # if an old configuration was not found.
             return "Your new settings have been installed."
-        else:
-            return "Your new settings have been installed and the old ones have been saved."
         finally:
             shutil_copy(self.config_dir, bgx_folder)
 
